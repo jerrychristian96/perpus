@@ -26,6 +26,7 @@ include 'navbar.php';
         
           <h2 class="jr-content-title">Returns Table</h2>
           <form action="" method="post">
+          
           <div class="container">
               <input type="date" name="date_awal" class="form-control col-2 rounded-10 shadow mr-2">
               <input type="date" name="date_akhir" class="form-control col-2 rounded-10 shadow mr-2">
