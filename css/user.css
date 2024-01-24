@@ -1,0 +1,137 @@
+
+body {
+        padding-top: 56px; /* Adjust this value based on your navbar height */
+        margin: 20px; /* Adjust this value to add margin around the content */
+    }
+
+    @media (max-width: 576px) {
+        body {
+            padding-top: 70px; /* Adjust for smaller screens */
+        }
+    }
+      .navbar{
+        background-color: #001B79;
+        
+      }
+
+      .bg-primary{
+
+          background-color: #001B79;
+
+      }
+      .md{
+        background-color: #001B79;
+        
+      }
+      .tmb{
+        background-color: #CD8D7A;
+        
+      }
+      body{
+        background-color: #F5F5F5;
+        
+      }
+      thead{
+        background-color: #001B79;
+        color: #FFFFFF;
+        
+
+      }
+      canvas {
+      height: 250px;
+      width: 100%;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+
+    .formscaner {
+      height: 450px;
+    }
+
+
+    body {
+      height: 800px;
+      width: 100%;
+      background-color: #DCF2F1;
+
+    }
+    .bt{
+        background-color: #D2E0FB;
+    }
+    .riht{
+      margin-right: 160px;
+    }
+
+    @media screen and (max-width: 575px) {
+            canvas {
+                height: 170px;
+                width: 250px;
+                border-radius: 10px;
+            }
+            .formscaner {
+                height: 450px;
+            }
+
+          }
+
+     /* Tambahkan gaya khusus di sini sesuai kebutuhan Anda */
+     .navbar {
+      background-color: #001B79;
+      padding: 10px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .navbar h1 {
+      margin: 0;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .nav-item {
+      margin: 5px;
+    }
+
+    /* Menyembunyikan menu di versi desktop */
+    @media (min-width: 768px) {
+      .mobile-menu {
+        display: none;
+      }
+    }
+
+    /* Menyembunyikan hamburger di versi mobile */
+    @media (max-width: 767px) {
+      .desktop-menu {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 575px) {
+   canvas {
+      height: 170px;
+      width: 250px;
+      border-radius: 10px;
+   }
+}
+.card {
+    position: relative;
+}
+
+.overlay-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the alpha value for transparency */
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+ 
+    

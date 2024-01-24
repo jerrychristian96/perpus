@@ -1,0 +1,56 @@
+
+ @keyframes zoomInOut {
+      0%, 50% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .zoom-in-out-button {
+      width: 150px;
+      height: 20px;
+      display: inline-block;
+      /* padding: 10px 20px; */
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      /* background-color: #3498db; */
+      color: #fff;
+      border: none;
+      /* border-radius: 5px; */
+      animation: zoomInOut 2s infinite;
+    }
+
+    
+    @keyframes zoomIn {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    .zoom-in-button {
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      /* background-color: #3498db; */
+      color: #fff;
+      border: none;
+      transition: transform 0.3s; /* Menambahkan transisi untuk efek zoom in */
+    }
+
+    .zoom-in-button:hover {
+      animation: zoomIn 0.3s forwards; /* Mengaktifkan animasi zoom in saat tombol dihover */
+    }
+    .header-modal {
+      background-color: #0F2167;
+    }
+    .header-modal:hover {
+      background-color: #0F2167;
+    }
