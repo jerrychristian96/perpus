@@ -3197,7 +3197,8 @@ input[type="button"].btn-block {
   vertical-align: middle;
   content: "";
   background: no-repeat center center;
-  background-size: 100% 100%; }
+  background-size: 100% 100%; 
+}
 
 @media (max-width: 575.98px) {
   .navbar-expand-sm > .container,

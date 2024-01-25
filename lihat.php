@@ -12,8 +12,7 @@ if (!isset($_SESSION['id'])) {
   $_POST['kd_book'];
   $get_data = mysqli_query($conn, "SELECT * FROM tb_trainee WHERE nip_traines='$id'");
   $data = mysqli_fetch_array($get_data);
-  $get_data_buku = mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='".$_POST['kd_book']."'");
-  $data_buku = mysqli_fetch_array($get_data_buku);
+ 
 }
 ?>
 <!doctype html>
@@ -31,6 +30,9 @@ if (!isset($_SESSION['id'])) {
   <body>
  <?php
 include 'navbar.php';
+if(isset($_POST['kd_book'])){
+  $get_data_buku = mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='".$_POST['kd_book']."'");
+  $data_buku = mysqli_fetch_array($get_data_buku);
 ?>
   
 <hr>
@@ -115,6 +117,93 @@ include 'navbar.php';
         <div class="ht-40"></div>
       </div><!-- jr-content-body -->
 </div><!-- container -->
+<?php } else if ($_GET['lihat']) {
+    $get_data_buku = mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='".$_GET['lihat']."'");
+    $data_buku = mysqli_fetch_array($get_data_buku); ?>
+  <hr>
+  <div class="container">
+      <div class="jr-content-body pd-lg-l-40 d-flex flex-column">
+        <h2 class="jr-content-title">Book Details</h2>
+        <div class="form-row">
+           <div class="col-md-4 form-group">
+            <div class="m-1">
+            <img src="img/<?= $data_buku['tb_gambar_buku']; ?>" class=" rounded-20"  width="50%" height="70%">
+            </div>
+          </div>
+        <div class="col-md-4 form-group">
+           <div class="m-1">
+              <label for="">Book title :</label>
+              <input type="text" value="<?= $data_buku['tb_judul_buku']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Author :</label>
+              <input type="text" value="<?= $data_buku['tb_penulis']; ?>" class="form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Book code :</label>
+              <input type="text" value="<?= $data_buku['tb_kode_buku']; ?>" class="form-control" readonly>
+             </div>
+        </div>
+
+        <div class="col-md-2 form-group">
+            <div class="m-1">
+              <label for="">Number of books :</label>
+              <input type="text" value="<?= $data_buku['tb_stok_buku']+$stok_buku['stok']; ?>" class=" form-control" readonly >
+            </div>
+      
+            <div class="m-1">
+              <label for="">Book category :</label>
+              <input type="text" value="<?= $data_buku['tb_kategori_buku']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Publication Year :</label>
+              <input type="text" value="<?= $data_buku['tb_tahun_terbit']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Book entry date :</label>
+              <input type="text" value="<?= $data_buku['tb_tanggal_input_buku']; ?>" class=" form-control" readonly>
+             </div>
+          </div>
+   
+        <div class="col-md-2 form-group">
+            <div class="m-1">
+              <label for="">Bookshelf :</label>
+              <input type="text" value="<?= $data_buku['tb_rak_buku']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Book row :</label>
+              <input type="text" value="<?= $data_buku['tb_baris_buku']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Book publisher :</label>
+              <input type="text" value="<?= $data_buku['tb_penerbit']; ?>" class=" form-control" readonly>
+            </div>
+
+            <div class="m-1">
+              <label for="">Book volumes :</label>
+              <input type="text" value="<?= $data_buku['tb_volume']; ?>" class=" form-control" readonly>
+            </div>
+            
+            <div class="m-1">
+             
+              <a href="peminjaman.php" class="btn btn-danger rounded-10">return</a>
+            </div>
+
+   
+  
+        <div class="ht-40"></div>
+      </div><!-- jr-content-body -->
+</div><!-- container -->
+
+
+
+<?php } ?>
 
 
 

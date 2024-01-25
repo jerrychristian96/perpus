@@ -20,8 +20,8 @@
     <h1 class="font-weight-bold font-italic" href="#">Library</h1>
 
     <!-- Hamburger button for mobile -->
-    <button class="navbar-toggler tombol" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon tombol"></span>
+    <button class="navbar-toggler btn-danger navbar-dark bg-dark" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon "></span>
     </button>
 
     <!-- Navigation links -->

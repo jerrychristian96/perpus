@@ -20,9 +20,6 @@ if (!isset($_SESSION['id'])) {
 mysqli_query($conn,"UPDATE `tb_peminjaman` SET `tb_kembali`='$date__' WHERE `id_peminjaman`='$id__'");
   }
 
-  
-
-
   if (isset($_POST['bayar'])) {
     $idpeminjam = $_POST['idpeminjam'];
     $nmr_buku = $_POST['nmr_buku'];
@@ -94,10 +91,11 @@ if($insert_kembali_buku){
     // }
     
   } 
-  
-  $peminjam = mysqli_query($conn, "SELECT * FROM `tb_peminjaman` where tb_nip='$id' and tb_status='Dipinjam'");
+
+
   $get_data = mysqli_query($conn, "SELECT * FROM tb_trainee WHERE nip_traines='$id'");
   $data = mysqli_fetch_array($get_data);
+  $peminjam = mysqli_query($conn, "SELECT * FROM `tb_peminjaman` where tb_nip='$id' and tb_status='Dipinjam'");
 }
 ?>
 <!doctype html>
@@ -118,7 +116,7 @@ if($insert_kembali_buku){
 include 'navbar.php';
 ?>
   
-  <div class="container-fluid mt-3">
+  <div class="container-fluid">
 
 <div class="row m-2 mt-3">
   <div class="col-sm-8">
@@ -147,20 +145,10 @@ include 'navbar.php';
     return $sqly['tb_judul_buku'];
   }
   $i = 1; 
-  $tanggal_jatuh_tempo = $data['tb_kembali'];
-$tanggal_pembayaran = $data['date_peminjaman'];
-$tanggal_jatuh_tempo_obj = new DateTime($tanggal_jatuh_tempo);
-$tanggal_pembayaran_obj = new DateTime($tanggal_pembayaran);
-$selisih_hari = $tanggal_jatuh_tempo_obj->diff($tanggal_pembayaran_obj)->days;
-function formatRupiah($nilai) {
-  return "Rp: " . number_format($nilai, 0, ',', '.');
-}
-$tarif_denda_per_hari = 1000;
-$total_denda = max(0, $selisih_hari) * $tarif_denda_per_hari;
   foreach ($peminjam  as $data) :?>
     <tr>
-      <th scope="row"><?= $i;?></th>
-      <td class=" font-italic">
+      <td scope="row"><?= $i;?></td>
+      <td class="font-italic">
             <a href="lihat.php?lihat=<?= $data['tb_kd_buku']; ?>" class=" text-dark font-weight-bold"><?= nama($data['tb_kd_buku']);?></a>
       </td>
       <td><?= $data['date_peminjaman'];?></td>
@@ -178,10 +166,7 @@ $total_denda = max(0, $selisih_hari) * $tarif_denda_per_hari;
  
     </td>
      <td>
- <?php
 
-echo "Total ". formatRupiah($total_denda);
-?>
 </td>
 <td>
 <form action="" method="post">
@@ -190,7 +175,7 @@ echo "Total ". formatRupiah($total_denda);
 <input type="hidden" name="total_buku" value="<?= $data['tb_stok_peminjaman']?>">
 <input type="hidden" name="tgl_peminjam" value="<?= $data['date_peminjaman']?>">
 <input type="hidden" name="tgl_kembali" value="<?= $data['tb_kembali']?>">
-<input type="hidden" name="tagihan" value="<?= formatRupiah($total_denda) ?>">
+<input type="hidden" name="tagihan" value="">
   <button type="submit" name="bayar"  class="btn btn-sm btn-success">return</button>
 </form>
 
@@ -205,8 +190,8 @@ echo "Total ". formatRupiah($total_denda);
     </div>
     <style>
       .background{
-        background-color: #001B79;
-        color: #fff;
+        background-color: #fff;
+        color: black;
       }
     </style>
   </div>
@@ -257,12 +242,6 @@ echo "Total ". formatRupiah($total_denda);
     <script type="text/javascript" src="scanner/js/jquery.js"></script>
   <script type="text/javascript" src="scanner/js/qrcodelib.js"></script>
   <script type="text/javascript" src="scanner/js/webcodecamjquery.js"></script>
-  <script>
-  function toggleMobileMenu() {
-    var desktopMenu = document.querySelector('.desktop-menu');
-    desktopMenu.style.display = (desktopMenu.style.display === 'none' || desktopMenu.style.display === '') ? 'flex' : 'none';
-  }
-</script>
     <script type="text/javascript">
     var arg = {
       resultFunction: function(result) {
