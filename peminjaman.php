@@ -14,12 +14,6 @@ if (!isset($_SESSION['id'])) {
   $get_data_buku = mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='$kodebuku'");
   $data_buku = mysqli_fetch_array($get_data_buku);
 
-  if (isset($_POST['datekembali'])) {
-    $id__ = $_POST['id'];
-    $date__ = $_POST['tanggal_kembali'];
-mysqli_query($conn,"UPDATE `tb_peminjaman` SET `tb_kembali`='$date__' WHERE `id_peminjaman`='$id__'");
-  }
-
   if (isset($_POST['bayar'])) {
     $idpeminjam = $_POST['idpeminjam'];
     $nmr_buku = $_POST['nmr_buku'];
@@ -57,28 +51,13 @@ if($insert_kembali_buku){
     if($sql_cekdata_peminjaman == 0){
       $max_id = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`id_peminjaman`) As id FROM `tb_peminjaman`"));
       $idBuku = $max_id['id'] + 1;
-      $insertbuku = mysqli_query($conn, "INSERT INTO `tb_peminjaman`(`id_peminjaman`,`tb_nip`, `tb_kd_buku`, `tb_stok_peminjaman`) VALUES ('$idBuku','$id','$kodebuku','$pinjam')");
-
-
-
-      // if ($insertbuku){
-      //   $kd=$_POST['kd_buku'];
-      //   $ambil_stokbuku = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`tb_stok_buku`) As jumlahbuku FROM `tb_buku` where tb_kode_buku='$kd'"));
-      //   $ambilstok = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`tb_stok_peminjaman`) As jumlahstok FROM `tb_peminjaman` where tb_nip='$id'"));
-      //   $stok_ = $ambil_stokbuku['jumlahbuku']-$ambilstok['jumlahstok'];
-      //   mysqli_query($conn, "UPDATE `tb_buku` SET `tb_stok_buku`='$stok_' WHERE `tb_kode_buku`='$kd'");
-      //   echo notice(0);
-      // }
-    } 
-    // else{
-      // $sql_cekdata_peminjaman_stok = mysqli_fetch_array(mysqli_query($conn, "SELECT tb_stok_peminjaman FROM `tb_peminjaman` WHERE tb_nip='$id' and tb_kd_buku='$kodebuku'"));
-      // if($sql_cekdata_peminjaman_stok['tb_stok_peminjaman'] < 3){
-      //   $max = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`tb_stok_peminjaman`) As stok FROM `tb_peminjaman` WHERE date_peminjaman=date(now()) AND tb_kd_buku='$kodebuku'"));
-      //   $stokBuku = $max['stok'] + 1;
-      // $tambahstok = mysqli_query($conn, "UPDATE `tb_peminjaman` SET `tb_stok_peminjaman`='$stokBuku' WHERE `tb_nip`='$id' and `tb_kd_buku`='$kodebuku' limit 3");
-      
-    // } 
-    else{
+      $pd = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='$kodebuku'"));
+      $katego = $pd['tb_kategori_buku'];
+      $insertbuku = mysqli_query($conn, "INSERT INTO `tb_peminjaman`(`id_peminjaman`,`tb_nip`, `tb_kd_buku`, `tb_stok_peminjaman`,`tb_kategori`) VALUES ('$idBuku','$id','$kodebuku','$pinjam','$katego')");
+      if($insertbuku){
+        echo "<script>setTimeout(function(){ window.location.href = 'peminjaman.php'; }, 3000);</script>";
+      }
+    } else{
         // $kd=$_POST['kd_buku'];
         // $ambil_stokbuku = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`tb_stok_buku`) As jumlahbuku FROM `tb_buku` where tb_kode_buku='$kd'"));
         // $ambilstok = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`tb_stok_peminjaman`) As jumlahstok FROM `tb_peminjaman` where tb_nip='$id'"));
@@ -88,7 +67,7 @@ if($insert_kembali_buku){
         alert('Buku sudah ada');
       </script>";
       }
-    // }
+   
     
   } 
 
@@ -133,11 +112,11 @@ include 'navbar.php';
       <th scope="col">Number of Books</th>
        <th scope="col">Return Date</th>
        <th scope="col">Late fees</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php 
+       <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php 
   function nama($nama_buku)
   {
     global $conn;
@@ -154,18 +133,48 @@ include 'navbar.php';
       <td><?= $data['date_peminjaman'];?></td>
       <td><?= $data['tb_stok_peminjaman'];?></td>
       <td>
-        <?php
-            if($data['tb_kembali'] < 0){ ?>
-              <button id="kembali" data-id="<?= $data['id_peminjaman'];?>" type="button" class="btn tmb font-italic btn-sm" data-toggle="modal" data-target="#staticBackdrop">
-              Enter the return date
-              </button>
-            <?php
-            } else {
-             echo $data['tb_kembali'];
-            } ?>
- 
+      <?php
+          if($data['tb_kategori'] == 'Pembinaan Dasar'){
+        $start_date = new DateTime($data['date_peminjaman']);
+        $last_date = clone $start_date;
+        $last_date->add(new DateInterval('P3D')); 
+        mysqli_query($conn, "UPDATE `tb_peminjaman` SET `tb_kembali`='".$last_date->format('Y-m-d')."' WHERE  `id_peminjaman`='".$data['id_peminjaman']."'"); 
+        
+      } else {
+        $start_date = new DateTime($data['date_peminjaman']);
+        $last_date = clone $start_date;
+        $last_date->add(new DateInterval('P14D')); 
+        mysqli_query($conn, "UPDATE `tb_peminjaman` SET `tb_kembali`='".$last_date->format('Y-m-d')."' WHERE  `id_peminjaman`='".$data['id_peminjaman']."'"); 
+      }
+            
+      ?>
+      <?= $data['tb_kembali'];?>
     </td>
      <td>
+     <?php
+
+$tanggalJatuhTempo = new DateTime($hari_ini); // Gantilah dengan tanggal jatuh tempo yang sesuai
+
+// Tanggal pembayaran
+$tanggalPembayaran = new DateTime($data['tb_kembali']); // Gantilah dengan tanggal pembayaran yang sesuai
+
+// Hitung selisih hari
+$selisihHari = $tanggalJatuhTempo->diff($tanggalPembayaran)->days;
+
+// Denda per hari
+$dendaPerHari = 1000;
+
+// Hitung total denda jika lewat 1 hari atau lebih
+if ($data['tb_kembali'] <= $hari_ini) {
+    $totalDenda = $selisihHari * $dendaPerHari;
+    echo "A fine of " . $totalDenda . " for being " . $selisihHari . " days past the due date.";
+} else {
+    echo "No fines, payment on time.";
+}
+function formatRupiah($nilai) {
+  return "Rp: " . number_format($nilai, 0, ',', '.');
+}
+?>
 
 </td>
 <td>
@@ -175,7 +184,7 @@ include 'navbar.php';
 <input type="hidden" name="total_buku" value="<?= $data['tb_stok_peminjaman']?>">
 <input type="hidden" name="tgl_peminjam" value="<?= $data['date_peminjaman']?>">
 <input type="hidden" name="tgl_kembali" value="<?= $data['tb_kembali']?>">
-<input type="hidden" name="tagihan" value="">
+<input type="hidden" name="tagihan" value="<?= formatRupiah($totalDenda) ?>">
   <button type="submit" name="bayar"  class="btn btn-sm btn-success">return</button>
 </form>
 
@@ -208,35 +217,6 @@ include 'navbar.php';
  
 
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm" id="modal-edit">
-    <div class="modal-content">
-      <div class="modal-header md">
-        <h5 class="modal-title text-light font-italic" id="staticBackdropLabel">Book return date</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="" method="post">
-      <div class="modal-body">
-        <input type="hidden" name="id" id="id">
-        <input type="date" name="tanggal_kembali" class="form-control">
-      </div>
-      <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <button type="submit" name="datekembali" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </form>
-  </div>
-</div>
-
-
-
-
-
-  
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script type="text/javascript" src="scanner/js/jquery.js"></script>

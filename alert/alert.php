@@ -1,3 +1,13 @@
+<style>
+  .small-alert {
+  width: 200px; /* Sesuaikan dengan lebar yang diinginkan */
+  /* height: 100px; */
+  font-size: 8px;
+  color: red; 
+  background-color: #D8D8D8;
+}
+</style>
+
 <?php
 
   if (isset($cekdata)) { ?>
@@ -34,4 +44,20 @@
         </script>
     
       <?php unset($datagagal);
-      }
+      } elseif (isset($alert)) { ?>
+
+<script>
+  Swal.fire({
+  position: "smallS",
+  icon: "error",
+  title: "Your Nip Is Not Registered",
+  showConfirmButton: false,
+  timer: 3200,
+  customClass: {
+    popup: 'small-alert', // Menambahkan kelas CSS khusus untuk mengatur ukuran alert
+  },
+});
+    </script>
+        
+          <?php unset($alert);
+          }
