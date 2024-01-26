@@ -49,9 +49,9 @@ if($insert_kembali_buku){
     $pinjam = '+1';
     $sql_cekdata_peminjaman = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `tb_peminjaman` WHERE tb_nip='$id' and tb_kd_buku='$kodebuku'"));
     if($sql_cekdata_peminjaman == 0){
+      $pd = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='$kodebuku'"));
       $max_id = mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(`id_peminjaman`) As id FROM `tb_peminjaman`"));
       $idBuku = $max_id['id'] + 1;
-      $pd = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM `tb_buku` WHERE tb_kode_buku='$kodebuku'"));
       $katego = $pd['tb_kategori_buku'];
       $insertbuku = mysqli_query($conn, "INSERT INTO `tb_peminjaman`(`id_peminjaman`,`tb_nip`, `tb_kd_buku`, `tb_stok_peminjaman`,`tb_kategori`) VALUES ('$idBuku','$id','$kodebuku','$pinjam','$katego')");
       if($insertbuku){
@@ -124,6 +124,9 @@ include 'navbar.php';
     return $sqly['tb_judul_buku'];
   }
   $i = 1; 
+  function formatRupiah($nilai) {
+    return "Rp: " . number_format($nilai, 0, ',', '.');
+  }
   foreach ($peminjam  as $data) :?>
     <tr>
       <td scope="row"><?= $i;?></td>
@@ -171,9 +174,7 @@ if ($data['tb_kembali'] <= $hari_ini) {
 } else {
     echo "No fines, payment on time.";
 }
-function formatRupiah($nilai) {
-  return "Rp: " . number_format($nilai, 0, ',', '.');
-}
+
 ?>
 
 </td>
